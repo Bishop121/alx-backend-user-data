@@ -78,21 +78,8 @@ class BasicAuth(Auth):
 
     def current_user(self, request=None) -> TypeVar('User'):
      """Retrieve the User in stance for a request."""
-        auth_header = self.authorization_header(request)
-        if not auth_header:
-            return None
-        #Basic 'QfghjfdsdjTWHanmmwns=='
+         auth_header = self.authorization_header(request)
         base64_auth = self.extract_base64_authorization_header(auth_header)
-        if not base64_auth:
-            return None
-       # 'QfghjfdsdjTWHanmmwns=='
-        decoded_b64_str = self.decode_base64_authorization_header(b64_str)
-        if not decoded_auth:
-            return None
-
-        email, password = self.extract_user_credentials(decoded_b64_str)
-        if not email or not password:
-            return None
-        #obidikeemmanuel@outlook.com,pass
-        user = self.user_object_from_credentials(email, password)
-        return user
+        decoded_auth = self.decode_base64_authorization_header(base64_auth)
+        user_email, user_pwd = self.extract_user_credentials(decoded_auth)
+        return self.user_object_from_credentials(user_email, user_pwd)
