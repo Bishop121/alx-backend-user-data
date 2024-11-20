@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """ Basic authentication class"""
 from .auth import Auth
-import base64
+from base64 import b64decode
 from models.user import User
 from typing import TypeVar
-
+from api.v1.auth import Auth
 
 class BasicAuth(Auth):
     """ BasicAuth that inherits from Auth"""
@@ -76,23 +76,23 @@ class BasicAuth(Auth):
             return None
         return user
 
-    def current_user(self, request=None) -> TypeVar('User')
-     """Retrieve the User instance for a request."""
+    def current_user(self, request=None) -> TypeVar('User'):
+     """Retrieve the User in stance for a request."""
         auth_header = self.authorization_header(request)
         if not auth_header:
             return None
-
+        #Basic 'QfghjfdsdjTWHanmmwns=='
         base64_auth = self.extract_base64_authorization_header(auth_header)
         if not base64_auth:
             return None
-
-        decoded_auth = self.decode_base64_authorization_header(base64_auth)
+       # 'QfghjfdsdjTWHanmmwns=='
+        decoded_b64_str = self.decode_base64_authorization_header(b64_str)
         if not decoded_auth:
             return None
 
-        email, password = self.extract_user_credentials(decoded_auth)
+        email, password = self.extract_user_credentials(decoded_b64_str)
         if not email or not password:
             return None
-
+        #obidikeemmanuel@outlook.com,pass
         user = self.user_object_from_credentials(email, password)
         return user
